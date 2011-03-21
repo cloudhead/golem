@@ -1,0 +1,13 @@
+{
+  "name"          : "golem",
+  "description"   : "pre-forking HTTP server",
+  "url"           : "http://github.com/cloudhead/golem",
+  "keywords"      : ["server", "http", "load-balancer"],
+  "author"        : "Alexis Sellier <alexis@cloudhead.io>",
+  "contributors"  : [],
+  "dependencies"  : {},
+  "version"       : "0.1.0",
+  "main"          : "./lib/golem",
+  "directories"   : { "test": "./test" },
+  "engines"       : { "node": ">=0.4.2" }
+}
