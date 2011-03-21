@@ -17,6 +17,11 @@ documentation
 
 See the `golem(1)` man page for specifics.
 
+development
+-----------
+
+Run `make` to build the source files.
+
 license
 -------
 

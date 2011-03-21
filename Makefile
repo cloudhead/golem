@@ -1,7 +1,7 @@
 
 SHELL := /bin/bash
 
-build/default/posix.node: src/posix.cc
+build/default/golem.node: src/golem.cc
 		node-waf configure build
 
 man:
