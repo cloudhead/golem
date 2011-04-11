@@ -1,0 +1,97 @@
+#!/usr/bin/env node
+
+var path = require('path');
+var fs = require('fs');
+var argv = require('optimist').argv;
+
+require.paths.unshift(path.join(__dirname, '..'));
+
+var VERSION_PATH = path.join(__dirname, '..', 'VERSION');
+
+this.help = [
+    'usage: golem [options] [app]',
+    '',
+    'options:',
+    '  -n, --workers <count>    number of worker processes to spawn',
+    '  -p, --port <port>        port to listen on',
+    '  -h, --host <host>        host to listen on',
+  //'  -c, --config <path>      configuration file to load',
+    '  -s, --signal <signal>    send signal to master process',
+    '  -E, --env <env>          environment to run in',
+    '  -D, --daemonize          run daemonized',
+    '  -I, --include <path>     add directories to require.paths',
+  //'  -P, --preload            preload the app',
+    '  -v, --version            display version and exit',
+    '      --pid <path>         pid file path',
+    '      --debug              debug mode',
+    '      --raw                raw input mode',
+    '      --keep-watchers      keep event watchers when forking',
+    '      --help               display this messaage'
+].join('\n');
+
+if (argv.help) {
+    console.log(this.help);
+    process.exit(0);
+}
+
+if (argv.v || argv.version) {
+    console.log('golem v' + fs.readFileSync(VERSION_PATH, 'ascii').trim());
+    process.exit(0);
+}
+
+var options = {
+    workers:   argv.workers   || argv.n,
+    port:      argv.port      || argv.p,
+    config:    argv.config    || argv.c,
+    host:      argv.host      || argv.h,
+    env:       argv.env       || argv.E,
+    preload:   argv.preload   || argv.P,
+    daemonize: argv.daemonize || argv.D,
+    pid:       argv.pid,
+    debug:     argv.debug,
+    raw:       argv.raw,
+    keep:      argv.keep,
+    app:       argv._.pop()
+};
+
+for (var k in options) { (options[k] === undefined) && delete(options[k]) }
+
+var golem = require('lib/golem');
+
+var include = argv.include || argv.I;
+
+include && Array.prototype.unshift.apply(require.paths, include.split(':'));
+
+var signal  = argv.s      || argv.signal,
+    pidfile = options.pid || '/var/run/golem.pid', readyPipe = null;
+
+if (signal) {
+    path.exists(pidfile, function (exists) {
+        var pid = -1;
+
+        if (exists) { 
+            pid = parseInt(fs.readFileSync(pidfile, 'ascii'));
+            if (pid > 1) {
+                process.kill(pid, signal);
+                console.log('golem-master[' + pid + '] killed with ' + signal);
+            }
+        } else {
+            console.error("pid file not found. master not running?");
+        }
+    });
+} else {
+    if (options.daemonize) {
+        readyPipe = golem.daemonize(options);
+    }
+    process.title = 'golem-master';
+
+    if ((options.daemonize && readyPipe) || !options.daemonize) {
+        new(golem.Server)(options, readyPipe).listen();
+    }
+}
+
+process.on('uncaughtException', function (err) {
+    console.error(err.stack);
+    process.exit(1);
+});
+
