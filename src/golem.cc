@@ -286,7 +286,7 @@ static Handle<Value> GetPwnam(const Arguments& args) {
     HandleScope scope;
     String::Utf8Value pwnam(args[0]->ToString());
     struct passwd *pwd;
-    Local<Object> obj;
+    Local<Object> obj = Object::New();
 
     if (pwd = getpwnam(*pwnam)) {
         obj->Set(String::NewSymbol("name"),   String::New(pwd->pw_name));
@@ -307,8 +307,8 @@ static Handle<Value> GetGrnam(const Arguments& args) {
     HandleScope scope;
     String::Utf8Value grnam(args[0]->ToString());
     struct group *grp;
-    Local<Object> obj;
-    Local<Array> members;
+    Local<Object> obj = Object::New();
+    Local<Array> members = Array::New();
 
     if (grp = getgrnam(*grnam)) {
         obj->Set(String::NewSymbol("name"),   String::New(grp->gr_name));
@@ -320,6 +320,7 @@ static Handle<Value> GetGrnam(const Arguments& args) {
         }
         obj->Set(String::NewSymbol("mem"), members);
 
+        scope.Close(members);
         return scope.Close(obj);
     } else {
         // Error

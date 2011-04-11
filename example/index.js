@@ -4,6 +4,10 @@ module.exports = function (server, callback) {
     server.port = 8888;
     server.workers = 4;
 
+    // Set process uid/gid to user 'nobody'
+    // server.user = 'nobody';
+    // server.group = 'nobody';
+
     var app = http.createServer(function (req, res) {
         res.writeHead(200, {});
         res.end('hello from ' + process.pid + '!');
