@@ -15,12 +15,12 @@ slow clients.
 documentation
 -------------
 
-See the `golem(1)` man page for specifics.
+See the `golem(1)` man page for specifics. Alternatively, you can view `doc/golem.1.md`.
 
 development
 -----------
 
-Run `make` to build the source files.
+Run `make` to build the source files, `make install` to install.
 
 license
 -------
