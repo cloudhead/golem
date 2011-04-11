@@ -8,6 +8,11 @@
   "dependencies"  : {},
   "version"       : "0.1.0",
   "main"          : "./lib/golem",
-  "directories"   : { "test": "./test" },
+  "bin"           : "./bin/golem",
+  "man"           : [ "man/golem.1" ],
+  "directories"   : { "lib": "./lib",
+                      "man": "./man",
+                      "doc": "./doc",
+                      "bin": "./bin" },
   "engines"       : { "node": ">=0.4.2" }
 }
