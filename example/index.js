@@ -4,6 +4,9 @@ module.exports = function (server, callback) {
     server.port = 8888;
     server.workers = 4;
 
+    server.log = './golem.log'; // Defaults to /var/log/golem.log
+    server.pid = './golem.pid'; // Defaults to /var/run/golem.pid
+
     // Set process uid/gid to user 'nobody'
     // server.user = 'nobody';
     // server.group = 'nobody';
@@ -15,7 +18,7 @@ module.exports = function (server, callback) {
 
     // Called when a new worker is spawned and
     // ready to process requests.
-    server.once('worker', function (worker) {
+    server.on('worker', function (worker) {
         console.log(worker.toString() + ' ready!');
     });
 
