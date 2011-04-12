@@ -26,7 +26,6 @@ this.help = [
     '      --pid <path>         pid file path',
     '      --debug              debug mode',
     '      --raw                raw input mode',
-    '      --keep-watchers      keep event watchers when forking',
     '      --help               display this messaage'
 ].join('\n');
 
@@ -52,7 +51,6 @@ var options = {
     pid:       argv.pid,
     debug:     argv.debug,
     raw:       argv.raw,
-    keep:      argv.keep,
     app:       argv._.pop()
 };
 
