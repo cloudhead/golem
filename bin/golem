@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+require.paths.unshift(process.installPrefix + '/lib/node_modules');
+
 var path = require('path');
 var fs = require('fs');
 var argv = require('optimist').argv;
