@@ -89,9 +89,6 @@ if (signal) {
 
     if ((options.daemonize && readyPipe) || !options.daemonize) {
         new(golem.Server)(options, readyPipe).listen();
-    } else {
-        console.error("golem: error daemonizing.");
-        process.exit(1);
     }
 }
 
