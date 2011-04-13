@@ -330,9 +330,11 @@ static Handle<Value> GetGrnam(const Arguments& args) {
 
 static Handle<Value> CloseStdio(const Arguments& args) {
     HandleScope scope;
-    freopen("/dev/null", "r", stdin);
-    freopen("/dev/null", "w", stdout);
-    freopen("/dev/null", "w", stderr);
+    String::Utf8Value file(args[0]->ToString());
+
+    freopen("/dev/null", "w",  stdin);
+    freopen(*file,       "a+", stdout);
+    freopen(*file,       "a+", stderr);
     return scope.Close(Number::New(0));
 }
 
